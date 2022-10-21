@@ -1,0 +1,54 @@
+
+-- create
+CREATE TABLE EMPLOYEE (
+  id int not null unique,
+  name varchar(10) not null,
+  email varchar(20) not null unique,
+  salary int,
+  age tinyint check(age>=18),
+  status boolean default 1
+);
+
+-- insert
+INSERT INTO EMPLOYEE(id,name,email,salary,age,status) values(1,"abc","abs@gmail.com",50000,19,1),(2,"def","def@gmail.com",60000,22,0),(3,"ghi","ghi@gmail.com",70000,21,0);
+
+insert into EMPLOYEE(id,name,email,salary,age,status)value(4,"jkl","jkl@gmail.com",80000,20,3);
+-- fetch 
+SELECT * FROM EMPLOYEE;
+update EMPLOYEE set salary=90000 where id=3;
+
+select * from EMPLOYEE;
+ROLLBACK;  
+COMMIT;
+select * from EMPLOYEE;
+
+create table teacher(
+  id int,
+  teachername varchar(10),
+  teachercontact int
+
+);
+
+create table course(
+  courseid int,
+  coursetitle varchar(10),
+  teacherid int references teacher(id),
+  courseprice int
+
+);
+
+desc teacher;
+insert into teacher(id,teachername,teachercontact)values
+(1,"ram",1234),(2,"gopi",5678),(3,"jay",9101);
+
+insert into course(courseid,coursetitle,teacherid,courseprice)values
+(001,"java",1,10000),(002,"python",2,10000),(003,"python",1,15000),(004,"php",5,15000);
+
+
+select * from course;
+select * from teacher;
+
+select * from teacher inner join course on course.teacherid=teacher.id;
+select * from teacher left join course on course.courseid=teacher.id;
+select * from course right join teacher on course.teacherid=teacher.id;
+select * from course cross join teacher;

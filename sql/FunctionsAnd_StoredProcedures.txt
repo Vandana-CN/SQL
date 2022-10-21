@@ -1,0 +1,137 @@
+#non-parameterized
+Delimiter $
+create function HelloWorld()
+returns varchar(50)
+deterministic
+begin
+return"Hello world from user" ;
+end $
+delimiter ;
+select Helloworld() as "message";
+
+
+
+#parameterized
+delimiter $
+create function showName(firstName varchar(50),lastName varchar(50))
+returns varchar(50)
+deterministic
+begin
+return concat(firstName,lastName);
+end $
+delimiter ;
+select showName("a","b");
+
+
+#calculating age
+delimiter $
+create function calculateAge(dob date)
+returns int
+deterministic
+begin
+declare today_date date;
+select current_date() into today_date;
+return year(today_date)-year(dob);
+end $
+delimiter ;
+select calculateAge("1995-10-20") as "your-age";
+
+
+
+#Stored Procedure
+Delimeter $
+create procedure getTeacherAndCourseInfo()
+Begin
+select * from teacher;
+select * from course;
+End$
+
+
+#Stored Procedure with in
+Delimiter $
+create  procedure getTeacherNameFromId(in id int)
+Begin
+select teachername from teacher where teacher.id = 1;
+End$
+
+
+#Stored Procedure with out
+Delimiter $
+create procedure getteacherRecordFromId(out rec int)
+Begin
+select count(*) into rec from teacher where teacher.id=1;
+End$
+
+#Stored Procedure with in and out
+Delimiter $
+create  procedure GetOrderCountByStatus (
+	IN  orderStatus VARCHAR(25),
+	OUT total INT
+)
+Begin
+	select count(orderNumber)
+	INTO total
+	FROM orders
+	WHERE status = orderStatus;
+End$
+
+
+
+Delimiter $
+call getTeacherRecordFromId(@rec);
+select @rec as 'totalRecords';
+
+#view creation
+select * from course;
+create view courseView as select courseid,coursetitle from course;
+select * from courseView;
+
+
+#
+create table info(id int,name varchar(10),age int);
+insert into info(id,name,age)values(1,"Vandana",22),(2,"Pooja",21);
+select * from info;
+create view infoview as select id,name from books;
+select * from infoview;
+
+
+
+#Employee
+delimiter $
+create function employee()
+returns Table as
+return
+select * from emp into employees;
+return emp;
+end $
+
+#3
+Delimiter $
+create function counts()
+returns int
+deterministic
+begin
+declare count int;
+select count(*) from Employee into count;
+return count;
+end $
+delimiter ;
+select counts();
+
+#4
+CREATE FUNCTION func(in dept int)
+RETURNS TABLE
+AS
+RETURN  SELECT ename FROM table WHERE deptno == dept
+go
+    select * 
+    FROM    Employee
+    WHERE   emp IN ( SELECT column_name FROM function_name(inputparametes) )
+
+
+#
+
+
+
+
+

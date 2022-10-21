@@ -1,0 +1,72 @@
+-- trigger
+
+create table employeee (
+id int,
+name varchar(10),
+dept varchar(10),
+salary int,
+address varchar(10),
+city varchar(10)
+);
+insert into employeee values(5,'abc','it',2000,'mumbai','pune');
+select * from employeee;
+Delimiter $
+create trigger properSalary
+before insert on employeee for each row
+Begin
+if new.salary<0 then set new.salary=0;
+end if;
+end $
+Delimiter ;
+insert into employeee values(6,'xyz','hr',-1000,'tamilnadu','chennai');
+select * from employeee;
+
+---update
+insert employeee
+SET City = 'Bangalore' Where id = 6;
+select * from employeee;
+Delimiter $
+create trigger properSalary
+after update on employeee for each row
+Begin
+if new.salary<0 then set new.salary=0;
+end if;
+end $
+Delimiter ;
+
+
+
+
+
+
+
+-----
+
+#transactions
+start transaction;
+delete from employeees where salary=2000;
+commit;
+insert into employeees values(5,'abc','it',8000,'mumbai','pune');
+rollback;
+select * from employeees;
+
+
+#savepoint
+start transaction;
+select * from employeees;
+update employeees set salary=salary+99999;
+savepoint sp;
+insert into employeees values(5,'abc','it',8000,'mumbai','pune');
+rollback to sp;
+commit;
+
+
+
+
+
+
+
+
+
+
+

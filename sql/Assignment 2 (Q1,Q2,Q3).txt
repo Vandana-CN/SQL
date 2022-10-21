@@ -1,0 +1,157 @@
+
+Q1)TEACHER
+
+create table TEACHER(
+  NO int,
+  Name varchar(20),
+  Age int,
+  Department varchar(20),
+  DOJ varchar(10),
+  Salary int,
+  Sex varchar(1)
+);
+
+insert into TEACHER(NO,Name,Age,Department,DOJ,Salary,Sex)values
+(1,"Jugal",34,"Computer","1997-01-10",12000,"M"),
+(2,"Sharmila",31,"History","1998-03-24",20000,"F"),
+(3,"Sandeep",32,"Maths","1996-12-12",30000,"M"),
+(4,"Sangeetha",35,"History","1999-07-01",140000,"F"),
+(5,"Rakesh",42,"Maths","1997-09-05",25000,"M"),
+(6,"Shyam",50,"History","1998-06-27",30000,"M"),
+(7,"Shiv Om",44,"Computer","1997-02-25",21000,"M"),
+(8,"Shalakha",33,"Maths","1997-07-31",20000,"F");
+
+
+desc TEACHER;
+
+select * from TEACHER;
+
+select * from TEACHER where Department="History";
+
+select name from TEACHER where(Department="Maths" and Sex="F");
+
+select name,DOJ from TEACHER order by DOJ;
+
+select name,salary,age from TEACHER where Sex="M";
+
+select name,salary,age,15/100*salary as "Bonus" from TEACHER;
+
+select name,DOJ from TEACHER where DOJ like "1997%";
+
+select * from TEACHER order by NO limit 3;
+
+select * from TEACHER where NO>3;
+
+insert into TEACHER values(9,"Raja",26,"Computer","1995-05-13",2300,"M");
+
+select count(distinct Department) from TEACHER;
+
+select max(Age) from TEACHER where Sex="F";
+
+select avg(Salary) from TEACHER where Sex="M";
+
+select sum(Salary)from TEACHER where DOJ<'1997-01-01';
+
+
+
+
+Q2)SALESMAN
+
+create table SALESMAN(
+SALESMAN_ID int primary key,
+NAME varchar(10),
+CITY varchar(10),
+COMMISION float
+);
+
+insert into SALESMAN(SALESMAN_ID,NAME,CITY,COMMISION)values
+(5001,"Rose","New York",0.15),
+(5002,"Siya","Paris",0.13),
+(5005,"Alex","London",0.11),
+(5006,"Sumit","Paris",0.14),
+(5003,"David","San Jose",0.12),
+(5007,"Rakesh","Rome",0.13);
+
+select * from SALESMAN;
+
+create table ORDERS(
+  ORDER_NO int,
+  PURCHASE_AMOUNT int,
+  ORDER_DATE varchar(10),
+  CUSTOMER_ID int,
+  SALESMAN_ID int REFERENCES SALESMAN(SALESMAN_ID)
+
+);
+
+insert into ORDERS(ORDER_NO,PURCHASE_AMOUNT,ORDER_DATE,CUSTOMER_ID,SALESMAN_ID)values
+(70001,150.5,"2012-10-05",3005,5002),
+(70009,270.65,"2012-09-10",3001,5005),
+(70002,65.26,"2012-10-05",3002,5001),
+(70004,110.5,"2012-08-17",3009,5003),
+(70007,948.5,"2012-09-10",3005,5002),
+(70005,2400.6,"2012-07-27",3007,5001),
+(70008,5760,"2012-09-10",3002,5001),
+(70010,1983.43,"2012-10-10",3004,5006),
+(70003,2480.4,"2012-10-10",3009,5003),
+(70012,250.45,"2012-06-27",3008,5002),
+(70011,75.29,"2012-08-17",3003,5007),
+(70013,3045.6,"2012-04-25",3002,5001);
+
+select * from ORDERS;
+
+select * from ORDERS where SALESMAN_ID=(select SALESMAN_ID
+from SALESMAN where NAME="David");
+
+select * from ORDERS where SALESMAN_ID=(select SALESMAN_ID from SALESMAN where CITY="London");
+
+select * from orders where purchase_amount >(select avg(purchase_amount) from orders) and order_date="2012-10-10";
+
+select * from orders where salesman_id in(select salesman_id from salesman where city="Paris");
+
+SELECT * FROM ORDERS WHERE SALESMAN_ID =
+    (SELECT SALESMAN_ID FROM SALESMAN WHERE NAME='David');
+
+SELECT * FROM ORDERS WHERE SALESMAN_ID IN
+    (SELECT SALESMAN_ID FROM SALESMAN WHERE CITY='London');
+
+SELECT * FROM ORDERS WHERE SALESMAN_ID =
+    (SELECT DISTINCT SALESMAN_ID FROM ORDERS WHERE CUSTOMER_ID =3004);
+    
+SELECT * FROM ORDERS WHERE PURCHASE_AMOUNT > (SELECT AVG(PURCHASE_AMOUNT)
+                       FROM ORDERS WHERE ORDER_DATE = '2012-10-10');
+
+SELECT * FROM orders WHERE SALESMAN_ID IN 
+    (SELECT SALESMAN_ID FROM SALESMAN WHERE CITY ='Paris');
+    
+
+SELECT COMMISSION FROM SALESMAN WHERE SALESMAN_ID IN
+    (SELECT SALESMAN_ID FROM customer WHERE city = 'New York');
+    
+SELECT * FROM ORDERS WHERE PURCHASE_AMOUNT < (SELECT AVG(PURCHASE_AMOUNT)
+                       FROM ORDERS WHERE ORDER_DATE = '2012-09-10');
+
+SELECT ALL NAME FROM SALESMAN;
+
+
+
+
+Q3)BOOKS
+
+create table books(Book_id varchar(10),Book_name varchar(100),Author_name varchar(100),Publishers varchar(100),price int(10),Type varchar(100),Qty int(10), PRIMARY KEY (Book_id));
+insert into books values("C0001","Fast Cook","Lata Kapoor","EPB",355,"Cookery",5);
+insert into books values("F0001","The Tears","William Hopkins","First Publ",650,"Fiction",20);
+insert into books values("T0001","My First C++","Brain and Brook","EPB",350,"Text",10);
+insert into books values("T0002","C++ Brain Works","AW Rossaine","TDH",350,"Text",15);
+insert into books values("F0002","Thunderbolts","Anna Roberts","First Publ",750,"Fiction",50);
+
+create table issued(book_id varchar(10) REFERENCES books(book_id),Qunatity_issued int);
+insert into issued values("T0001",4);
+insert into issued values("C0001",5);
+insert into issued values("F0001",2);
+
+i) select book_name,author_name,price,Qunatity_issued from books join issued on books.book_id=issued.book_id where publishers="First Publ";
+ii) select book_name from books join issued on books.book_id=issued.book_id where type="text";
+iii) select book_name,price from books order by price asc;
+iv) select price+50 as "Increased Price"from books where publishers="EPB";
+
+

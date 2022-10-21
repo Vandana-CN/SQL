@@ -1,0 +1,13 @@
+//Using Group By
+select * from orders group by customer_id;
+select * from orders group by customer_id having count(customer_id)>1;
+
+
+//Sub Queries
+select  distinct item from orders where customer_id=(select customer_id from customers where first_name="John" and last_name="Reinhardt");
+select sum(amount) as"total" from orders where item="Keyboard" and customer_id=(select customer_id from customers where first_name="John" and last_name="Reinhardt");
+
+//Inbuild Functions
+
+SELECT UPPER(item) from orders;
+SELECT LOWER(item) from orders;
